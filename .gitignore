@@ -1,0 +1,8 @@
+cat <<EOF > .gitignore
+*.tfstate
+*.tfstate.*
+.terraform/
+*.pem
+inventory.ini
+EOF
+

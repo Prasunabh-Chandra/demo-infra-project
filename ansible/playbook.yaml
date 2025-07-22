@@ -1,0 +1,35 @@
+---
+
+- name: Configure web servers
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Create demo user
+      user: 
+        name: demo
+        state: present
+        shell: /bin/bash
+
+    - name: Add demo user to sudoers
+      lineinfile:
+        path: /etc/sudoers
+        line: 'demo ALL=(ALL) NOPASSWD:ALL'
+        validte: 'visudo -cf %s'
+
+    - name: Install Apache webserver
+      yum:
+        name: httpd
+        state: present
+        
+    - name: Start and Enable apache
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+    
+    - name: Copy custom HTML
+      copy:
+        content: "<h1>Welcome to our Demo App</h1>"
+        dest: /var/www/html/index.html
+
